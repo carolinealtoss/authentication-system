@@ -21,6 +21,7 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'google2fa_secret',
     ];
 
     /**
@@ -31,6 +32,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'google2fa_secret',
     ];
 
     /**
@@ -44,5 +46,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * verifica se o usuário tem 2FA habilitado.
+     */
+    public function hasEnabled2FA()
+    {
+        return !is_null($this->google2fa_secret);
+    }
+
+    /**
+     * desabilita o 2FA.
+     */
+    public function disable2FA()
+    {
+        $this->google2fa_secret = null;
+        $this->save();
     }
 }
