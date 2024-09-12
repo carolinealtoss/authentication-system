@@ -1,66 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Autenticação com Dois Fatores (2FA)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto é uma aplicação em Laravel que implementa um sistema de autenticação com autenticação de dois fatores (2FA), permitindo uma camada extra de segurança.
 
-## About Laravel
+O sistema exige que os usuários insiram um código de verificação gerado por um aplicativo autenticador, como o Google Authenticator, além das credenciais padrão (e-mail e senha).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Registro de Usuário:** Permite o registro de novos usuários.
+- **Autenticação com Dois Fatores (2FA):** Após o login com e-mail e senha, se o usuário tiver 2FA habilitado, será solicitado um código 2FA.
+- **Lembrete de Senha:** Envio de e-mails para redefinição de senha.
+- **Proteção de Rotas com 2FA:** As rotas protegidas exigem autenticação de dois fatores para usuários habilitados.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Pré-requisitos
 
-## Learning Laravel
+- PHP >= 8.1
+- Composer
+- Node.js (para compilação dos assets)
+- Banco de Dados MySQL (ou outro compatível com Laravel)
+- Aplicativo de Autenticação como Google Authenticator ou Authy
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Instalação
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **Clone o repositório:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```bash
+   git clone git@github.com:carolinealtoss/authentication-system.git
+   cd authentication-system
+   ```
 
-## Laravel Sponsors
+2. **Instale as dependências do Composer:**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+3. **Instale as dependências do Node.js:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   ```bash
+   npm install
+   ```
 
-## Contributing
+4. **Copie o arquivo `.env.example` para `.env`:**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```bash
+   cp .env.example .env
+   ```
 
-## Code of Conduct
+5. **Configure o banco de dados no arquivo `.env`:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Abra o arquivo `.env` e configure as credenciais do banco de dados:
 
-## Security Vulnerabilities
+   ```bash
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nome_do_banco
+   DB_USERNAME=seu_usuario
+   DB_PASSWORD=sua_senha
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Gere a chave da aplicação:**
 
-## License
+   ```bash
+   php artisan key:generate
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. **Execute as migrações para criar as tabelas no banco de dados:**
+
+   ```bash
+   php artisan migrate
+   ```
+
+8. **Compile os assets de frontend:**
+
+   ```bash
+   npm run dev
+   ```
+
+9. **Inicie o servidor de desenvolvimento:**
+
+   ```bash
+   php artisan serve
+   ```
+
+   Acesse a aplicação em `http://localhost:8000`.
+
+## Configurando o Google 2FA
+
+1. **Instalação do Google2FA:**
+   O pacote `pragmarx/google2fa-laravel` já está instalado no projeto e configurado.
+
+2. **Ativar o 2FA para um usuário:**
+   Após registrar um usuário, navegue para o painel do usuário e siga as instruções para configurar o Google Authenticator.
+
+   - Escaneie o código QR gerado pelo sistema no aplicativo Google Authenticator.
+   - O código gerado deve ser inserido no campo de verificação para completar a configuração.
+
+## Executando os Testes
+
+1. **Testes de Unidade e Funcionalidade:**
+
+   O projeto usa PHPUnit para testes. Para rodar os testes de unidade e de funcionalidade, execute:
+
+   ```bash
+   php artisan test
+   ```
+
+2. **Testar Funcionalidades Específicas:**
+
+   Se quiser testar uma funcionalidade específica, por exemplo, o login, você pode rodar:
+
+   ```bash
+   php artisan test --filter NomeDoTeste
+   ```
+
+## Estrutura do Projeto
+
+- `app/Models/User.php`: Contém a lógica do modelo de usuário, incluindo métodos relacionados ao 2FA.
+- `app/Http/Controllers/Auth/AuthenticatedSessionController.php`: Controlador responsável pela lógica de login e autenticação.
+- `app/Http/Controllers/TwoFactorController.php`: Controlador responsável pela verificação do código 2FA.
+- `resources/views/auth/`: Contém as views para o login e verificação do 2FA.
+- `routes/web.php`: Define as rotas principais, incluindo as rotas de verificação de 2FA.
+
+## Tecnologias Utilizadas
+
+- **Laravel 11:** Framework PHP para desenvolvimento web.
+- **Pragmarx Google2FA:** Biblioteca para autenticação de dois fatores com o Google Authenticator.
+- **Bootstrap:** Framework CSS para estilização do frontend.
+- **MySQL:** Banco de dados relacional.
+- **PHPUnit:** Para testes automatizados.
+
+## Licença
+
+Este projeto é open-source e está sob a licença [MIT](https://opensource.org/licenses/MIT).
